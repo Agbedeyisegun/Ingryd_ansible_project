@@ -1,0 +1,26 @@
+- hosts:  all 
+  become: true
+  tasks:
+  - name: Install apache2 package 
+    apt:
+      name: apache2
+      state: latest
+    when: ansible_architecture == "x86_64" and ansible_distribution == "Ubuntu"
+ 
+  - name: update Respository index
+    apt: 
+      update_cache: yes 
+      state: latest
+    when: ansible_architecture == "x86_64" and ansible_distribution == "Ubuntu"
+
+  - name: Add php support for apache
+    apt: 
+      name: libapache2-mod-php
+      state: latest
+    when: ansible_architecture == "x86_64" and ansible_distribution == "Ubuntu"
+  
+  - name: Install htop
+    apt:
+      name: htop
+      state: latest
+    when: ansible_architecture == "x86_64" and ansible_distribution == "Ubuntu"
