@@ -1,0 +1,51 @@
+- hosts:  all 
+  become: true
+  tasks:
+
+# This is for ubuntu package update
+  
+  
+  - name: update Respository index
+    apt: 
+      update_cache: yes 
+      state: latest
+    when: ansible_architecture == "x86_64" and ansible_distribution == "Ubuntu"
+
+
+
+# This is for Oraclelinux package update 
+
+      
+  - name: update Respository index
+    dnf: 
+      update_cache: yes 
+      state: latest
+    when: ansible_architecture == "x86_64" and ansible_distribution == "OracleLinux"
+
+# Creating Ansible user called Super===========================================
+  - name: create controluser
+    tags: always
+    user:
+      name: 
+        - controluser
+        - testuser1
+      shell: /bin/bash
+      group:  root
+
+  - name: add ssh key for controluser
+    tags: always
+    authorized_key:
+      user: controluser 
+      key:  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILPQ0Vpfho7NFXMntiJ80Aj/JaZmFmzPymAt5nbGx2cp ansible"
+
+
+  - name: Add sudoer for controluser
+    tags: always
+    copy:
+      src: sudoer_controluser
+      dest: /etc/sudoers.d/controluser
+      owner: root 
+      group: root
+      mode: 0440
+
+
