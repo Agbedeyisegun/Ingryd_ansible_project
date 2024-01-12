@@ -22,28 +22,9 @@
       state: latest
     when: ansible_architecture == "x86_64" and ansible_distribution == "OracleLinux"
 
-# Creating Ansible user called Super===========================================
-  - name: create super user
-    tags: always
-    user:
-      name: superuser
-      group:  root
-
-  - name: adde ssh key for superuser
-    tags: always
-    authorized_key:
-      user: superuser 
-      key:  "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILPQ0Vpfho7NFXMntiJ80Aj/JaZmFmzPymAt5nbGx2cp ansible"
 
 
-  - name: Add sudoer for superuser
-    tags: always
-    copy:
-      src: sudoer_superuser
-      dest: /etc/sudoers.d/superuser
-      owner: root 
-      group: root
-      mode: 0440
+
 
 
 # This is for webserver play==================================================

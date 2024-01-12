@@ -60,10 +60,32 @@
     dnf:
       name:
         - httpd
-        - Add php support for httpd
-        - libapache2-mod-php
       state: latest
     when: ansible_architecture == "x86_64" and ansible_distribution == "OracleLinux"
+
+
+- name: change mail address for admin(Oracle)
+    tags: apache,httpd,rocky
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin pheemyhan@gmail.com
+    when: ansible_distribution == "OracleLinux"
+    register: httpd
+
+
+  - name: Restart Httpd
+    tags: apache,oracle,httpd
+    services:
+      name: httpd
+      state:  restarted
+    when: httpd.changed
+
+
+
+
+
+
 
 
 
@@ -189,16 +211,17 @@
 
   
   - name: install MariaDB server
-    apt:
-      name: mariadb-server
+    package:
+      name: MariaDB server
       state: latest
     when: ansible_architecture == "x86_64" and ansible_distribution == "Ubuntu"
 
   
-  - name: install mariaDB server   
-    dnf:
-      name: mariadb-server
+  - name: install MariaDB server   
+    package:
+      name: MariaDB server
       state: latest
     when: ansible_architecture == "x86_64" and ansible_distribution == "OracleLinux"
+
 
 
